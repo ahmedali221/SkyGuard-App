@@ -24,7 +24,8 @@ class _SignupPageState extends State<SignupPage> {
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthAuthenticated) {
-            Navigator.pushReplacementNamed(context, '/home');
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/home', (route) => false);
           } else if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message)),
@@ -108,12 +109,7 @@ class _SignupPageState extends State<SignupPage> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const LoginPage(),
-                          ),
-                        );
+                        Navigator.pushReplacementNamed(context, '/');
                       },
                       child: const Text("Already have an account? Login"),
                     ),
