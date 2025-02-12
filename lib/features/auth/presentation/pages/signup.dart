@@ -27,6 +27,7 @@ class _SignupPageState extends State<SignupPage> {
             Navigator.pushNamedAndRemoveUntil(
                 context, '/home', (route) => false);
           } else if (state is AuthError) {
+            // this is a new update
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message)),
             );
