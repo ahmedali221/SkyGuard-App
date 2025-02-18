@@ -1,9 +1,9 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:weather_app/features/auth/presentation/cubit/auth_states.dart';
-import 'package:weather_app/features/auth/presentation/pages/loginPage.dart';
-import '../widgets/customTextInput.dart';
+import '../../../../widgets/customTextInput.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -49,7 +49,7 @@ class _SignupPageState extends State<SignupPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      "Welcome to weather app",
+                      "Create New Account",
                       style:
                           TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                     ),
@@ -108,11 +108,25 @@ class _SignupPageState extends State<SignupPage> {
                       icon: const Icon(Icons.person_add),
                       label: const Text("Signup"),
                     ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/');
-                      },
-                      child: const Text("Already have an account? Login"),
+                    RichText(
+                      text: TextSpan(
+                        style:
+                            Theme.of(context).textTheme.bodySmall!.copyWith(),
+                        children: <TextSpan>[
+                          const TextSpan(text: "Already Have An Account? "),
+                          TextSpan(
+                            text: "Login",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(color: Colors.blueAccent),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.pushReplacementNamed(context, '/');
+                              },
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

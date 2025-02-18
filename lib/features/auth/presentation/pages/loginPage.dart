@@ -1,9 +1,9 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:weather_app/features/auth/presentation/cubit/auth_states.dart';
-import 'package:weather_app/features/auth/presentation/pages/signup.dart';
-import '../widgets/customTextInput.dart';
+import '../../../../widgets/customTextInput.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -24,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
         listener: (context, state) {
           if (state is AuthAuthenticated) {
             Navigator.pushNamedAndRemoveUntil(
-                context, '/home', (route) => false);
+                context, '/weather', (route) => false);
           } else if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -49,9 +49,12 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          "Welcome to weather app",
-                          style: TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.bold),
+                          "Welcome to SkyGuard",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .copyWith(
+                                  fontWeight: FontWeight.bold, fontSize: 30),
                         ),
                         CustomTextFormField(
                           controller: _emailController,
@@ -86,7 +89,6 @@ class _LoginPageState extends State<LoginPage> {
                         ElevatedButton.icon(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              // Trigger login
                               context.read<AuthCubit>().login(
                                     _emailController.text,
                                     _passwordController.text,
@@ -96,11 +98,25 @@ class _LoginPageState extends State<LoginPage> {
                           icon: const Icon(Icons.login),
                           label: const Text("Login"),
                         ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pushReplacementNamed(context, '/signup');
-                          },
-                          child: const Text("Don't have an account? Sign Up"),
+                        RichText(
+                          text: TextSpan(
+                            style: Theme.of(context).textTheme.bodySmall!,
+                            children: <TextSpan>[
+                              const TextSpan(text: "Don't have an account? "),
+                              TextSpan(
+                                text: "Sign Up",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .copyWith(color: Colors.blueAccent),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.pushReplacementNamed(
+                                        context, '/signup');
+                                  },
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
