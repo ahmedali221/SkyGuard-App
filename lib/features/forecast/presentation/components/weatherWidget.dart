@@ -27,10 +27,10 @@ class WeatherWidget extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
+              spacing: 6,
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Day or "TODAY" label
                 Text(
                   isToday ? "TODAY" : DateFormat('EEEE').format(day.date),
                   style: const TextStyle(
@@ -38,7 +38,6 @@ class WeatherWidget extends StatelessWidget {
                     fontSize: 18,
                   ),
                 ),
-                const SizedBox(height: 8),
 
                 // Weather icon
                 Image.network(
@@ -50,17 +49,15 @@ class WeatherWidget extends StatelessWidget {
                     return const Icon(Icons.error, size: 50);
                   },
                 ),
-                const SizedBox(height: 8),
 
                 // Temperature
                 Text(
                   '${day.temperature}°C',
                   style: TextStyle(
-                    fontSize: constraints.maxWidth * 0.12,
+                    fontSize: constraints.maxWidth * 0.1,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 8),
 
                 // Weather condition
                 Text(
@@ -71,7 +68,6 @@ class WeatherWidget extends StatelessWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 8),
 
                 // Prediction result
                 if (prediction == 0 || prediction == 1)
@@ -93,7 +89,7 @@ class WeatherWidget extends StatelessWidget {
                       getMessageForPrediction(prediction),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: constraints.maxWidth * 0.042,
+                        fontSize: constraints.maxWidth * 0.06,
                         color: prediction == 1 ? Colors.green : Colors.red,
                       ),
                       textAlign: TextAlign.center,

@@ -103,7 +103,7 @@ class WeatherRemoteDataSource {
       List<int> features = _translateWeatherToFeatures(forecastDay);
       print("Features being sent to API: $features");
 
-      final url = Uri.parse('http://192.168.20.164:5001/predict');
+      final url = Uri.parse('http://192.168.1.8:5001/predict');
 
       final response = await http.post(
         url,
