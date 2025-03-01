@@ -8,68 +8,114 @@ class WeatherWidget extends StatelessWidget {
     super.key,
     required this.isToday,
     required this.day,
+    this.prediction = -1,
   });
 
   final bool isToday;
   final ForecastDay day;
+  final int prediction;
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return Container(
-        padding: const EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey.shade300),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              blurRadius: 6,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: IntrinsicHeight(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                isToday ? "TODAY" : DateFormat('EEEE').format(day.date),
-                style: const TextStyle(fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              Expanded(
-                child: Image.network(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Card(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              spacing: 6,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  isToday ? "TODAY" : DateFormat('EEEE').format(day.date),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+
+                // Weather icon
+                Image.network(
                   "https:${day.conditionIcon}",
-                  width: constraints.maxWidth * 0.25,
-                  height: constraints.maxWidth * 0.25,
+                  width: constraints.maxWidth * 0.3,
+                  height: constraints.maxWidth * 0.3,
                   fit: BoxFit.cover,
                   errorBuilder: (context, object, stackTrace) {
-                    return const Icon(Icons.error);
+                    return const Icon(Icons.error, size: 50);
                   },
                 ),
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      '${day.temperature}°C',
-                      style: TextStyle(fontSize: constraints.maxWidth * 0.10),
+
+                // Temperature
+                Text(
+                  '${day.temperature}°C',
+                  style: TextStyle(
+                    fontSize: constraints.maxWidth * 0.1,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                // Weather condition
+                Text(
+                  day.condition,
+                  style: TextStyle(
+                    fontSize: constraints.maxWidth * 0.06,
+                    color: Colors.grey[700],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+
+                // Prediction result
+                if (prediction == 0 || prediction == 1)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8,
+                      horizontal: 12,
                     ),
-                    Text(
-                      day.condition,
-                      style: TextStyle(fontSize: constraints.maxWidth * 0.06),
+                    decoration: BoxDecoration(
+                      color:
+                          prediction == 1 ? Colors.green[50] : Colors.red[50],
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: prediction == 1 ? Colors.green : Colors.red,
+                        width: 1,
+                      ),
+                    ),
+                    child: Text(
+                      getMessageForPrediction(prediction),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: constraints.maxWidth * 0.06,
+                        color: prediction == 1 ? Colors.green : Colors.red,
+                      ),
                       textAlign: TextAlign.center,
                     ),
-                  ],
-                ),
-              ),
-            ],
+                  ),
+                if (prediction == -1)
+                  Text(
+                    "Prediction unavailable.",
+                    style: TextStyle(
+                      fontSize: constraints.maxWidth * 0.05,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+              ],
+            ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
+  }
+
+  String getMessageForPrediction(int prediction) {
+    if (prediction == 1) {
+      return "Great day for outdoor activities!";
+    } else {
+      return "It might not be the best time to go outside.";
+    }
   }
 }
