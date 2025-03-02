@@ -9,16 +9,17 @@ class WeatherRemoteDataSource {
 
   Future<Forecast> getForecast(String cityName) async {
     final url =
+<<<<<<< HEAD
         Uri.parse('$baseUrl?key=$apiKey&q=$cityName&days=3&aqi=yes&alerts=no');
+=======
+        Uri.parse('$baseUrl?key=$apiKey&q=$cityName&days=3&aqi=no&alerts=no');
+>>>>>>> e94cac065677c722f1f08d6badcb74b14e21e408
     try {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
-      if (response.statusCode == 200) {
-        final jsonData = jsonDecode(response.body);
 
-        final cityName = jsonData['location']['name'];
         final cityName = jsonData['location']['name'];
 
         final forecastDaysData = jsonData['forecast']['forecastday'] as List;
@@ -27,28 +28,27 @@ class WeatherRemoteDataSource {
           final temperature = item['day']['maxtemp_c'];
           final condition = item['day']['condition']['text'];
           final conditionIcon = item['day']['condition']['icon'];
+<<<<<<< HEAD
           final uv = item['day']['uv'].toDouble();
           final rainChance = item['day']['daily_chance_of_rain'];
           final airQuality = item['day']['air_quality']['us-epa-index'];
+=======
+>>>>>>> e94cac065677c722f1f08d6badcb74b14e21e408
 
           return ForecastDay(
             date: date,
             temperature: temperature.toDouble(),
             condition: condition,
             conditionIcon: conditionIcon,
+<<<<<<< HEAD
             uv: uv,
             rainChance: rainChance,
             airQuality: airQuality,
+=======
+>>>>>>> e94cac065677c722f1f08d6badcb74b14e21e408
           );
         }).toList();
 
-        return Forecast(cityName: cityName, forecastDays: forecastDays);
-      } else {
-        throw Exception(
-            'Failed to fetch forecast data: ${response.statusCode}');
-      }
-    } catch (e) {
-      rethrow;
         return Forecast(cityName: cityName, forecastDays: forecastDays);
       } else {
         throw Exception(
@@ -126,8 +126,14 @@ class WeatherRemoteDataSource {
   Future<int> predictWeather(ForecastDay forecastDay) async {
     try {
       List<int> features = _translateWeatherToFeatures(forecastDay);
+<<<<<<< HEAD
 
       final url = Uri.parse('http://192.168.1.4:5001/predict');
+=======
+      print("Features being sent to API: $features");
+
+      final url = Uri.parse('http://192.168.1.8:5001/predict');
+>>>>>>> e94cac065677c722f1f08d6badcb74b14e21e408
 
       final response = await http.post(
         url,
@@ -137,6 +143,11 @@ class WeatherRemoteDataSource {
         }),
       );
 
+<<<<<<< HEAD
+=======
+      print("API Response: ${response.body}");
+
+>>>>>>> e94cac065677c722f1f08d6badcb74b14e21e408
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
 
@@ -148,6 +159,10 @@ class WeatherRemoteDataSource {
           // Ensure the list is not empty and contains an integer
           if (predictionList.isNotEmpty && predictionList[0] is int) {
             final prediction = predictionList[0];
+<<<<<<< HEAD
+=======
+            print("Prediction from API: $prediction");
+>>>>>>> e94cac065677c722f1f08d6badcb74b14e21e408
             return prediction;
           } else {
             throw Exception(
@@ -162,7 +177,11 @@ class WeatherRemoteDataSource {
             'Failed to get prediction: ${response.statusCode}, ${response.body}');
       }
     } catch (e) {
+<<<<<<< HEAD
       print(e.toString());
+=======
+      print("Prediction Error: ${e.toString()}");
+>>>>>>> e94cac065677c722f1f08d6badcb74b14e21e408
       return -1;
     }
   }
