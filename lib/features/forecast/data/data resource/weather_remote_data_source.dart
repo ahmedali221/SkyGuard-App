@@ -15,7 +15,10 @@ class WeatherRemoteDataSource {
 
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
 
+        final cityName = jsonData['location']['name'];
         final cityName = jsonData['location']['name'];
 
         final forecastDaysData = jsonData['forecast']['forecastday'] as List;
@@ -39,6 +42,13 @@ class WeatherRemoteDataSource {
           );
         }).toList();
 
+        return Forecast(cityName: cityName, forecastDays: forecastDays);
+      } else {
+        throw Exception(
+            'Failed to fetch forecast data: ${response.statusCode}');
+      }
+    } catch (e) {
+      rethrow;
         return Forecast(cityName: cityName, forecastDays: forecastDays);
       } else {
         throw Exception(
