@@ -10,10 +10,17 @@ class ForecastDay {
   final double temperature;
   final String condition;
   final String conditionIcon;
+  final double uv;
+  final int rainChance;
+  final int airQuality;
 
-  ForecastDay(
-      {required this.date,
-      required this.temperature,
-      required this.condition,
-      required this.conditionIcon});
+  ForecastDay({
+    required this.date,
+    required this.temperature,
+    required this.condition,
+    required this.conditionIcon,
+    required this.uv,
+    required this.rainChance,
+    required this.airQuality,
+  });
 }
