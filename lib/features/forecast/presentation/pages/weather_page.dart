@@ -83,7 +83,7 @@ class _WeatherPageState extends State<WeatherPage> {
               centerTitle: true,
               actions: [
                 IconButton(
-                  icon: const Icon(Icons.logout),
+                  icon: const Icon(Icons.logout_outlined),
                   onPressed: () {
                     context.read<AuthCubit>().logout();
                     Navigator.pushReplacementNamed(context, '/');
