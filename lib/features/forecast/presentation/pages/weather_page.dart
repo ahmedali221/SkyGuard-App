@@ -198,6 +198,8 @@ class _WeatherPageState extends State<WeatherPage> {
                               ],
                             );
                           } else if (state is ForecastError) {
+                            // this shows an error message to the user
+
                             return Center(child: Text(state.message));
                           } else {
                             return Container();
