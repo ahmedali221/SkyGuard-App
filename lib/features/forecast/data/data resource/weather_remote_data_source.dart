@@ -159,7 +159,7 @@ class WeatherRemoteDataSource {
 
   List<int> _translateWeatherToFeatures(ForecastDay forecastDay) {
     final condition = forecastDay.condition.toLowerCase();
-
+    // assigning the new number
     int outlookRainy = condition.contains('rain') ? 1 : 0;
 
     int outlookSunny = condition.contains('sunny') ? 1 : 0;
