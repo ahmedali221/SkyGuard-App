@@ -4,18 +4,36 @@ import numpy as np
 
 app = Flask(__name__)
 
+<<<<<<< HEAD
+file_path = "C:\\Users\\Ahmed Ali\\Desktop\\python\\model.pkl"
+=======
 # Load the model
 file_path = "model.pkl"  # Path to the model file
+>>>>>>> origin/main
 with open(file_path, 'rb') as file:
     model = pickle.load(file)
 
 
+<<<<<<< HEAD
+=======
 # Define a route for the home page
+>>>>>>> origin/main
 @app.route('/')
 def home():
     return "Welcome to the ML Prediction API!"
 
 
+<<<<<<< HEAD
+@app.route('/predict', methods=['POST'])
+def predict():
+    data = request.json 
+    features = data['features']  
+
+    features = np.array(features).reshape(1, -1)
+
+    prediction = model.predict(features)
+
+=======
 # Define the prediction route
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -29,6 +47,7 @@ def predict():
     prediction = model.predict(features)
 
     # Return the prediction as JSON
+>>>>>>> origin/main
     return jsonify({'prediction': prediction.tolist()})
 
 
