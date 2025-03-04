@@ -9,7 +9,7 @@ class WeatherRemoteDataSource {
 
   Future<Forecast> getForecast(String cityName) async {
     final url =
-        Uri.parse('$baseUrl?key=$apiKey&q=$cityName&days=3&aqi=no&alerts=no');
+        Uri.parse('$baseUrl?key=$apiKey&q=$cityName&days=3&aqi=yes&alerts=no');
     try {
       final response = await http.get(url);
 
@@ -24,12 +24,18 @@ class WeatherRemoteDataSource {
           final temperature = item['day']['maxtemp_c'];
           final condition = item['day']['condition']['text'];
           final conditionIcon = item['day']['condition']['icon'];
+          final uv = item['day']['uv'].toDouble();
+          final rainChance = item['day']['daily_chance_of_rain'];
+          final airQuality = item['day']['air_quality']['us-epa-index'];
 
           return ForecastDay(
             date: date,
             temperature: temperature.toDouble(),
             condition: condition,
             conditionIcon: conditionIcon,
+            uv: uv,
+            rainChance: rainChance,
+            airQuality: airQuality,
           );
         }).toList();
 
@@ -46,7 +52,7 @@ class WeatherRemoteDataSource {
   Future<Forecast> getForecastByLocation(
       double latitude, double longitude) async {
     final url = Uri.parse(
-        '$baseUrl?key=$apiKey&q=$latitude,$longitude&days=3&aqi=no&alerts=no');
+        '$baseUrl?key=$apiKey&q=$latitude,$longitude&days=3&aqi=yes&alerts=no');
     try {
       final response = await http.get(url);
 
@@ -69,11 +75,17 @@ class WeatherRemoteDataSource {
           final temperature = item['day']['maxtemp_c'] as num?;
           final condition = item['day']['condition']['text'] as String?;
           final conditionIcon = item['day']['condition']['icon'] as String?;
+          final uv = item['day']['uv'] as num?;
+          final rainChance = item['day']['daily_chance_of_rain'] as int?;
+          final airQuality = item['day']['air_quality']['us-epa-index'] as int?;
 
           if (dateString == null ||
               temperature == null ||
               condition == null ||
-              conditionIcon == null) {
+              conditionIcon == null ||
+              uv == null ||
+              rainChance == null ||
+              airQuality == null) {
             throw Exception(
                 'Invalid forecast data: Missing fields in forecast day');
           }
@@ -85,6 +97,9 @@ class WeatherRemoteDataSource {
             temperature: temperature.toDouble(),
             condition: condition,
             conditionIcon: conditionIcon,
+            uv: uv.toDouble(),
+            rainChance: rainChance,
+            airQuality: airQuality,
           );
         }).toList();
 
@@ -101,9 +116,8 @@ class WeatherRemoteDataSource {
   Future<int> predictWeather(ForecastDay forecastDay) async {
     try {
       List<int> features = _translateWeatherToFeatures(forecastDay);
-      print("Features being sent to API: $features");
 
-      final url = Uri.parse('http://192.168.1.8:5001/predict');
+      final url = Uri.parse('http://192.168.1.4:5001/predict');
 
       final response = await http.post(
         url,
@@ -112,8 +126,6 @@ class WeatherRemoteDataSource {
           'features': [features], // Wrap features in a list to make it 2D
         }),
       );
-
-      print("API Response: ${response.body}");
 
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
@@ -126,7 +138,6 @@ class WeatherRemoteDataSource {
           // Ensure the list is not empty and contains an integer
           if (predictionList.isNotEmpty && predictionList[0] is int) {
             final prediction = predictionList[0];
-            print("Prediction from API: $prediction");
             return prediction;
           } else {
             throw Exception(
@@ -141,7 +152,7 @@ class WeatherRemoteDataSource {
             'Failed to get prediction: ${response.statusCode}, ${response.body}');
       }
     } catch (e) {
-      print("Prediction Error: ${e.toString()}");
+      print(e.toString());
       return -1;
     }
   }
