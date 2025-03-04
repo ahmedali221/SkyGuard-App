@@ -22,6 +22,7 @@ class ForecastCubit extends Cubit<ForecastState> {
   Future<void> getForecastByLocation(double latitude, double longitude) async {
     emit(ForecastLoading());
     try {
+      // this is a new update
       final forecast =
           await weatherRepositry.getForecastByLocation(latitude, longitude);
       emit(ForecastLoaded(forecast));
