@@ -14,6 +14,7 @@ class ForecastCubit extends Cubit<ForecastState> {
       final forecast = await weatherRepositry.getForecast(cityName);
       emit(ForecastLoaded(forecast));
     } catch (e) {
+      // this is a new update
       emit(ForecastError(e.toString()));
     }
   }
