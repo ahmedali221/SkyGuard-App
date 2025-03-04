@@ -143,6 +143,7 @@ class _WeatherPageState extends State<WeatherPage> {
                             return Column(
                               children: [
                                 Text(
+                                  // this shows the name of the city
                                   forecast.cityName,
                                   style: const TextStyle(
                                     fontSize: 24,
