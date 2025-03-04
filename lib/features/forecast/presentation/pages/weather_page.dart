@@ -166,6 +166,8 @@ class _WeatherPageState extends State<WeatherPage> {
                                     ),
                                     itemCount: forecast.forecastDays.length,
                                     itemBuilder: (context, index) {
+                                      // this creates a list of weather predictions based on the forecast
+
                                       final day = forecast.forecastDays[index];
                                       final isToday = day.date.day ==
                                               DateTime.now().day &&
